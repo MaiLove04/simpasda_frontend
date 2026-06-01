@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Jenis Sampah - Web Asri</title>
+    <title>Data Kurir - Web Asri</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
@@ -24,13 +24,9 @@
             border-radius: 12px;
             border: none;
         }
-        /* Custom Header Tabel agar serasi dengan Hijau Gelap Sidebar */
         .thead-custom {
             background-color: #112d22 !important;
             color: #ffffff !important;
-        }
-        .table hover tbody tr:hover {
-            background-color: #f1f5f3;
         }
     </style>
 </head>
@@ -46,13 +42,9 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h4 class="fw-bold text-dark mb-1">Data Jenis Sampah</h4>
-                        <p class="text-muted small mb-0">Kelola jenis sampah dan harga konversi per kilogram</p>
+                        <h4 class="fw-bold text-dark mb-1">Data Kurir Lapangan</h4>
+                        <p class="text-muted small mb-0">Kelola armada kurir armada penjemputan sampah Basayan Bestari</p>
                     </div>
-                    <a href="tambah_jenis_sampah.html" class="btn btn-success d-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-medium small shadow-sm">
-                        <i class="bi bi-plus-lg"></i>
-                        Tambah Jenis Sampah
-                    </a>
                 </div>
 
                 <div class="table-responsive rounded-3">
@@ -60,18 +52,19 @@
                         <thead>
                             <tr class="thead-custom">
                                 <th width="70" class="py-3 small text-uppercase tracking-wider fw-semibold">No</th>
-                                <th class="py-3 small text-uppercase tracking-wider fw-semibold">Nama Sampah</th>
-                                <th class="py-3 small text-uppercase tracking-wider fw-semibold">Harga / Kg</th>
-                                <th class="py-3 small text-uppercase tracking-wider fw-semibold">Status</th>
-                                <th width="220" class="py-3 small text-uppercase tracking-wider fw-semibold">Aksi</th>
+                                <th class="py-3 small text-uppercase tracking-wider fw-semibold">Nama Kurir</th>
+                                <th class="py-3 small text-uppercase tracking-wider fw-semibold">Email</th>
+                                <th class="py-3 small text-uppercase tracking-wider fw-semibold">No. Telepon</th>
+                                <th class="py-3 small text-uppercase tracking-wider fw-semibold">Status Akun</th>
+                                <th width="150" class="py-3 small text-uppercase tracking-wider fw-semibold">Aksi</th>
                             </tr>
                         </thead>
                         
-                        <tbody id="tabel-sampah">
+                        <tbody id="tabel-kurir">
                             <tr>
-                                <td colspan="5" class="text-muted py-5">
+                                <td colspan="6" class="text-muted py-5">
                                     <div class="spinner-border text-success spinner-border-sm me-2" role="status"></div>
-                                    Memuat data dari sistem Simpasda...
+                                    Memuat data armada kurir...
                                 </td>
                             </tr>
                         </tbody>
@@ -82,6 +75,6 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="kurir.js"></script>
 </body>
 </html>

@@ -1,0 +1,65 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white" style="width: 260px; min-height: 100vh; background-color: #112d22; border-right: 1px solid rgba(255, 255, 255, 0.05);">
+    
+    <a href="dashboard.html" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none px-2 mt-2">
+        <i class="bi bi-recycle text-success me-2 fs-3"></i>
+        <span class="fs-5 fw-bold tracking-wide" style="letter-spacing: 0.5px;">SIMPASDA</span>
+    </a>
+    
+    <hr class="my-3" style="border-top: 1px solid rgba(255,255,255,0.15);">
+    
+    <ul class="nav nav-pills flex-column mb-auto gap-1" id="sidebar-menu">
+        <li class="nav-item">
+            <a href="dashboard.html" class="nav-link text-white-50 d-flex align-items-center gap-3 py-2.5 px-3 rounded-3 sidebar-item" id="menu-dashboard">
+                <i class="bi bi-grid-1x2-fill fs-5"></i>
+                <span class="fw-medium small">Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="jenis_sampah.html" class="nav-link text-white-50 d-flex align-items-center gap-3 py-2.5 px-3 rounded-3 sidebar-item" id="menu-jenis-sampah">
+                <i class="bi bi-trash3-fill fs-5"></i>
+                <span class="fw-medium small">Jenis Sampah</span>
+            </a>
+        </li>
+        <li>
+            <a href="nasabah.html" class="nav-link text-white-50 d-flex align-items-center gap-3 py-2.5 px-3 rounded-3 sidebar-item" id="menu-nasabah">
+                <i class="bi bi-people-fill fs-5"></i>
+                <span class="fw-medium small">Data Nasabah</span>
+            </a>
+        </li>
+        <li>
+            <a href="kurir.html" class="nav-link text-white-50 d-flex align-items-center gap-3 py-2.5 px-3 rounded-3 sidebar-item" id="menu-kurir">
+                <i class="bi bi-truck fs-5"></i>
+                <span class="fw-medium small">Data Kurir</span>
+            </a>
+        </li>
+    </ul>
+    
+    <hr class="my-3" style="border-top: 1px solid rgba(255,255,255,0.15);">
+    
+    <div class="px-2 mb-2">
+        <button onclick="logout()" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 border-0 py-2 rounded-3" style="background-color: rgba(220, 53, 69, 0.1); color: #ea868f;">
+            <i class="bi bi-box-arrow-left"></i>
+            <span class="fw-semibold small">Keluar Akun</span>
+        </button>
+    </div>
+</div>
+
+<style>
+    .sidebar-item {
+        transition: all 0.2s ease;
+    }
+    .sidebar-item:hover {
+        background-color: rgba(255, 255, 255, 0.08) !important;
+        color: #ffffff !important;
+    }
+    /* Warna hijau menyala yang elegan saat menu aktif */
+    .sidebar-item.active {
+        background-color: #198754 !important; 
+        color: #ffffff !important;
+        box-shadow: 0 4px 12px rgba(25, 135, 84, 0.25);
+    }
+    .py-2\.5 {
+        padding-top: 0.65rem !important;
+        padding-bottom: 0.65rem !important;
+    }
+</style>

@@ -1,10 +1,32 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Alamat API Laravel Simpasda (Sesuaikan port-nya jika berbeda)
-    const API_URL = "http://127.0.0.1:8000/api/jenis-sampah"; 
+    // === TAMBAHAN UNTUK LOAD SIDEBAR DINAMIS ===
+    fetch("sidebar.html")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("sidebar-container").innerHTML = html;
+            // Membuat menu 'Jenis Sampah' di sidebar otomatis menyala (aktif)
+            document.getElementById("menu-jenis-sampah").classList.add("active");
+        })
+        .catch(err => console.error("Gagal memuat sidebar:", err));
+        
+    // ... sisa kode cek token dan fetch API jenis sampah milikmu tetap di bawahnya ...
 
+    // ==========================================
+    // TAMBAHAN: CEK STATUS LOGIN & AMBIL TOKEN
+    // ==========================================
+    const token = localStorage.getItem("token_simpasda");
+
+    // Jika token tidak ada, langsung paksa pindah ke halaman login
+    if (!token) {
+        window.location.href = "login.html";
+        return; // Hentikan sisa eksekusi kode di bawah
+    }
+
+    // 1. Alamat API Laravel Simpasda
+    const API_URL = "http://127.0.0.1:8000/api/jenis-sampah"; 
     const containerTabel = document.getElementById("tabel-sampah");
 
-    // Fungsi untuk memformat angka ke Rupiah agar sama dengan format 'number_format' di Laravel
+    // Fungsi untuk memformat angka ke Rupiah
     const formatRupiah = (angka) => {
         return new Intl.NumberFormat('id-ID', {
             style: 'currency',
@@ -13,12 +35,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }).format(angka);
     };
 
-    // 2. Ambil data menggunakan Fetch API
-    fetch(API_URL)
-        .then(response => response.json())
+    // 2. Ambil data menggunakan Fetch API (Sudah disisipkan token)
+    fetch(API_URL, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`, // Kirim token untuk nembak API yang dikunci middleware
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => {
+            // Jaga-jaga kalau tokennya kedaluwarsa atau tidak valid (unauthorized)
+            if (response.status === 401) {
+                localStorage.removeItem("token_simpasda");
+                window.location.href = "login.html";
+            }
+            return response.json();
+        })
         .then(hasil => {
-            // Sesuai kode Laravelmu: $jenisSampahs. 
-            // Kita cek apakah datanya dibungkus dalam properti 'data' (bawaan API Laravel) atau langsung array
             const jenisSampahs = hasil.data || hasil;
 
             // Jika datanya kosong
@@ -34,10 +68,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let barisHtml = "";
 
-            // 3. Lakukan Looping Data (Menggantikan fungsi @forelse)
+            // 3. Lakukan Looping Data
             jenisSampahs.forEach((item, index) => {
-                
-                // Logika penentuan badge status (Menggantikan @if($item->status == 'aktif'))
                 const badgeStatus = item.status === 'aktif' 
                     ? `<span class="badge bg-success">Aktif</span>` 
                     : `<span class="badge bg-danger">Nonaktif</span>`;
@@ -66,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
             });
 
-            // 4. Masukkan barisHtml yang sudah dibuat ke dalam tbody tabel
+            // 4. Masukkan barisHtml ke dalam tbody tabel
             containerTabel.innerHTML = barisHtml;
         })
         .catch(error => {
@@ -80,10 +112,28 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 });
 
-// Fungsi opsional jika tombol hapus diklik
+// Fungsi jika tombol hapus diklik (Sudah ditambahkan method DELETE dengan Token)
 function hapusData(id) {
+    const token = localStorage.getItem("token_simpasda");
+
     if (confirm('Yakin ingin menghapus data ini?')) {
-        console.log("Proses hapus ID:", id);
-        // Nanti logic Fetch dengan method DELETE ke API Laravel ditempatkan di sini
+        const DELETE_URL = `http://127.0.0.1:8000/api/jenis-sampah/${id}`;
+
+        fetch(DELETE_URL, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Accept": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(hasil => {
+            alert("Data berhasil dihapus!");
+            window.location.reload(); // Refresh halaman agar tabel update
+        })
+        .catch(error => {
+            console.error("Gagal menghapus data:", error);
+            alert("Gagal menghapus data dari server.");
+        });
     }
 }
