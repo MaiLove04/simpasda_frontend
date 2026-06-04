@@ -119,6 +119,8 @@ function hapusData(id) {
     if (confirm('Yakin ingin menghapus data ini?')) {
         const DELETE_URL = `http://127.0.0.1:8000/api/jenis-sampah/${id}`;
 
+        console.log('Hapus: URL=', DELETE_URL, 'tokenPresent=', !!token);
+
         fetch(DELETE_URL, {
             method: "DELETE",
             headers: {
@@ -126,14 +128,63 @@ function hapusData(id) {
                 "Accept": "application/json"
             }
         })
-        .then(response => response.json())
-        .then(hasil => {
-            alert("Data berhasil dihapus!");
-            window.location.reload(); // Refresh halaman agar tabel update
+        .then(response => {
+            console.log('Hapus: response.status=', response.status, 'ok=', response.ok);
+
+            if (response.status === 401) {
+                localStorage.removeItem("token_simpasda");
+                window.location.href = "login.html";
+                throw new Error('Unauthorized');
+            }
+
+            if (response.status === 204) {
+                alert("Data berhasil dihapus!");
+                window.location.reload();
+                return null;
+            }
+
+            // Log response body for debugging (clone before reading)
+            try {
+                const clone = response.clone();
+                clone.text().then(t => console.log('Hapus: response body text=', t));
+            } catch (e) {
+                console.warn('Gagal clone response untuk logging', e);
+            }
+
+            if (response.ok) {
+                return response.json().then(body => {
+                    console.log('Hapus: parsed JSON body=', body);
+                    if (body && (body.message || body.success)) {
+                        alert(body.message || 'Data berhasil dihapus!');
+                    } else {
+                        alert('Data berhasil dihapus!');
+                    }
+                    window.location.reload();
+                    return body;
+                }).catch(() => {
+                    alert('Data berhasil dihapus!');
+                    window.location.reload();
+                    return null;
+                });
+            }
+
+            return response.text().then(text => {
+                console.error('Hapus: error response text=', text);
+                let msg = 'Gagal menghapus data dari server.';
+                try {
+                    const parsed = JSON.parse(text);
+                    msg = parsed.message || parsed.error || msg;
+                } catch (e) {
+                    if (text) msg = text;
+                }
+                throw new Error(msg);
+            }).catch(() => {
+                throw new Error('Gagal menghapus data dari server.');
+            });
         })
         .catch(error => {
             console.error("Gagal menghapus data:", error);
-            alert("Gagal menghapus data dari server.");
+            alert(error.message || "Gagal menghapus data dari server.");
         });
     }
 }
